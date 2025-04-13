@@ -1,0 +1,62 @@
+DROP TABLE IF EXISTS zillow;
+DROP TABLE IF EXISTS income;
+DROP TABLE IF EXISTS unemployment;
+DROP TABLE IF EXISTS disney;
+DROP TABLE IF EXISTS tracts;
+DROP TABLE IF EXISTS series;
+DROP TABLE IF EXISTS sources;
+
+CREATE TABLE sources (
+  name VARCHAR PRIMARY KEY,
+  desc VARCHAR,
+  url VARCHAR,
+  freq VARCHAR DEFAULT 'Y' CHECK (freq IN ('M', 'Q', 'Y', 'I')),
+  geo VARCHAR DEFAULT 'NH' CHECK (geo IN ('NH', 'T'))
+);
+
+CREATE TABLE tracts (
+  tract VARCHAR PRIMARY KEY,
+  RegionName VARCHAR
+);
+
+CREATE TABLE zillow (
+  neighborhood VARCHAR,
+  period DATE,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_by VARCHAR DEFAULT CURRENT_USER NOT NULL,
+  value DOUBLE,
+  PRIMARY KEY (neighborhood, period, updated_at)
+);
+
+CREATE TABLE income (
+  tract VARCHAR,
+  period DATE,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_by VARCHAR DEFAULT CURRENT_USER NOT NULL,
+  value DOUBLE,
+  PRIMARY KEY (tract, period, updated_at)
+);
+
+CREATE TABLE unemployment (
+  tract VARCHAR,
+  period DATE,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_by VARCHAR DEFAULT CURRENT_USER NOT NULL,
+  value DOUBLE,
+  PRIMARY KEY (tract, period, updated_at)
+);
+
+CREATE TABLE disney (
+  neighborhood VARCHAR,
+  period DATE,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_by VARCHAR DEFAULT CURRENT_USER NOT NULL,
+  value DOUBLE,
+  PRIMARY KEY (neighborhood, period, updated_at)
+);
+
+INSERT INTO sources (name, desc, url, freq, geo) VALUES
+('zillow', 'Zillow Home Value Index', 'https://www.zillow.com/research/data/', 'Y', 'NH'),
+('income', 'Median Household Income', 'https://www.census.gov/data/developers/data-sets/acs-5year.html', 'Y', 'T'),
+('unemployment', 'Unemployment Rate', 'ttps://www.census.gov/data/developers/data-sets/acs-5year.html', 'Y', 'T'),
+('disney', 'Distance to Disney World', 'https://www.disney.com/parks-and-resorts/', 'Y', 'NH');
